@@ -53,4 +53,37 @@ export class UserService {
     );
     return { token };
   }
+
+  async updateUser(
+    id: number,
+    requesterId: number,
+    name: string,
+    cpf: string,
+    password: string
+  ) {
+    if (id !== requesterId) {
+      throw new Error("Você não pode editar outro usuário");
+    }
+    if (!name || !cpf || !password) {
+      throw new Error("Todos os campos são obrigatórios");
+    }
+    if (!isValidCPF(cpf)) throw new Error("CPF inválido");
+    if (!isValidPassword(password)) {
+      throw new Error("Senha deve ter no mínimo 8 caracteres, uma letra maiúscula e um número");
+    }
+
+    const user = await userRepository.findById(id);
+    if (!user) throw new Error("Usuário não encontrado");
+
+    const cpfExists = await userRepository.findByCPF(cpf);
+    if (cpfExists && cpfExists.id !== id) {
+      throw new Error("CPF já cadastrado");
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+    const updated = await userRepository.update(id, name, cpf, hashed);
+
+    const { password: _, ...userWithoutPassword } = updated;
+    return userWithoutPassword;
+  }
 }

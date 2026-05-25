@@ -23,4 +23,18 @@ export class UserController {
       res.status(401).json({ message: error.message });
     }
   }
+
+  async update(req: Request, res: Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id);
+      const requesterId = req.user!.id;
+      const { name, cpf, password } = req.body;
+      const user = await userService.updateUser(
+        id, requesterId, name, cpf, password
+      );
+      res.status(200).json(user);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  }
 }
