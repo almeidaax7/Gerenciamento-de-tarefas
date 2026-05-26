@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { CategoryService } from "../services/CategoryService";
+import { AuthRequest } from "../types";
 
 const categoryService = new CategoryService();
 
 export class CategoryController {
-  async getAll(req: Request, res: Response): Promise<void> {
+  async getAll(req: AuthRequest, res: Response): Promise<void> {
     try {
       const user_id = req.user!.id;
       const page = parseInt(req.query.page as string) || 1;
@@ -16,7 +17,7 @@ export class CategoryController {
     }
   }
 
-  async getById(req: Request, res: Response): Promise<void> {
+  async getById(req: AuthRequest, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
       const user_id = req.user!.id;
@@ -27,7 +28,7 @@ export class CategoryController {
     }
   }
 
-  async create(req: Request, res: Response): Promise<void> {
+  async create(req: AuthRequest, res: Response): Promise<void> {
     try {
       const user_id = req.user!.id;
       const { name, description } = req.body;
@@ -38,7 +39,7 @@ export class CategoryController {
     }
   }
 
-  async update(req: Request, res: Response): Promise<void> {
+  async update(req: AuthRequest, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
       const user_id = req.user!.id;
@@ -50,7 +51,7 @@ export class CategoryController {
     }
   }
 
-  async delete(req: Request, res: Response): Promise<void> {
+  async delete(req: AuthRequest, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
       const user_id = req.user!.id;

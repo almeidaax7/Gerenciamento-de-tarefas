@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/UserService";
+import { AuthRequest } from "../types";
 
 const userService = new UserService();
 
@@ -24,14 +25,12 @@ export class UserController {
     }
   }
 
-  async update(req: Request, res: Response): Promise<void> {
+  async update(req: AuthRequest, res: Response): Promise<void> {
     try {
       const id = parseInt(req.params.id);
       const requesterId = req.user!.id;
       const { name, cpf, password } = req.body;
-      const user = await userService.updateUser(
-        id, requesterId, name, cpf, password
-      );
+      const user = await userService.updateUser(id, requesterId, name, cpf, password);
       res.status(200).json(user);
     } catch (error: any) {
       res.status(400).json({ message: error.message });
