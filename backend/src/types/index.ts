@@ -1,44 +1,20 @@
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  cpf: string;
-  created_at: Date;
-  updated_at: Date;
-}
+import express from "express";
+import dotenv from "dotenv";
+import userRoutes from "./routes/userRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
 
-export interface Category {
-  id: number;
-  name: string;
-  description: string;
-  user_id: number;
-  created_at: Date;
-  updated_at: Date;
-}
+dotenv.config();
 
-export interface Project {
-  id: number;
-  name: string;
-  description: string;
-  user_id: number;
-  category_id: number;
-  created_at: Date;
-  updated_at: Date;
-}
+const app = express();
+app.use(express.json());
 
-export interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: "pending" | "in_progress" | "done";
-  user_id: number;
-  project_id: number;
-  created_at: Date;
-  updated_at: Date;
-}
+app.use("/users", userRoutes);
+app.use("/categories", categoryRoutes);
 
-export interface JwtPayload {
-  id: number;
-  email: string;
-}
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+export default app;
