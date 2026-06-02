@@ -7,6 +7,7 @@ const userController = new UserController();
 
 router.post("/register", (req, res) => userController.register(req, res));
 router.post("/login", (req, res) => userController.login(req, res));
+router.get("/me", authMiddleware, (req, res) => userController.me(req, res));
 router.put("/:id", authMiddleware, (req, res) => userController.update(req, res));
 
 export default router;
