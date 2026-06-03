@@ -12,7 +12,8 @@ export class UserController {
       const user = await userService.register(name, email, password, cpf);
       res.status(201).json(user);
     } catch (error: any) {
-      res.status(400).json({ message: error.message });
+      console.log("ERRO REGISTRO:", error);
+      res.status(400).json({ message: error.message || error.toString() });
     }
   }
 
