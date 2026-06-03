@@ -179,8 +179,8 @@ a:hover {
   font-size: 0.95rem;
 }
 
-.header-actions button,
-.header-actions a {
+.dashboard-header .header-actions button,
+.dashboard-header .header-actions a {
   width: auto;
   padding: 0.5rem 1rem;
   background-color: rgba(255,255,255,0.2);
@@ -190,8 +190,8 @@ a:hover {
   margin-top: 0;
 }
 
-.header-actions button:hover,
-.header-actions a:hover {
+.dashboard-header .header-actions button:hover,
+.dashboard-header .header-actions a:hover {
   background-color: rgba(255,255,255,0.3);
   text-decoration: none;
 }
@@ -268,11 +268,17 @@ a:hover {
   gap: 0.5rem;
 }
 
-.page-header button {
+.page-header .header-actions button {
   width: auto;
   padding: 0.5rem 1rem;
   margin-top: 0;
   font-size: 0.9rem;
+  background-color: #1e3a5f;
+  color: white;
+}
+
+.page-header .header-actions button:hover {
+  background-color: #2d6a9f;
 }
 
 /* Form Card */
