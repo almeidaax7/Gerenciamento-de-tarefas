@@ -1,0 +1,15 @@
+#!/bin/sh
+echo "🔍 Verificando mensagem do commit..."
+
+commit_msg=$(cat "$1" 2>/dev/null || git log -1 --pretty=%B)
+
+if ! echo "$commit_msg" | grep -qE "^(feat|fix|chore|docs|style|refactor|test|ci|perf|build)(\(.+\))?: .{3,}"; then
+  echo "❌ Mensagem de commit inválida!"
+  echo "✅ Use o formato: tipo(escopo): descrição"
+  echo "Exemplos:"
+  echo "  feat: adicionar login"
+  echo "  fix(auth): corrigir token JWT"
+  exit 1
+fi
+
+echo "✅ Mensagem de commit válida!"
