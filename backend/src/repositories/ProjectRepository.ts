@@ -4,55 +4,55 @@ import { Project } from "../types";
 export class ProjectRepository {
   async findAll(user_id: number, page: number, limit: number): Promise<Project[]> {
     const offset = (page - 1) * limit;
-    const result = await pool.query(
-      "SELECT * FROM projects WHERE user_id = $1 ORDER BY id LIMIT $2 OFFSET $3",
+    const [rows] = await pool.query(
+      "SELECT * FROM projects WHERE user_id = ? ORDER BY id LIMIT ? OFFSET ?",
       [user_id, limit, offset]
     );
-    return result.rows;
+    return rows as Project[];
   }
 
   async findById(id: number, user_id: number): Promise<Project | null> {
-    const result = await pool.query(
-      "SELECT * FROM projects WHERE id = $1 AND user_id = $2",
+    const [rows] = await pool.query(
+      "SELECT * FROM projects WHERE id = ? AND user_id = ?",
       [id, user_id]
     );
-    return result.rows[0] || null;
+    const projects = rows as Project[];
+    return projects[0] || null;
   }
 
-  async create(
-    name: string,
-    description: string,
-    user_id: number,
-    category_id: number
-  ): Promise<Project> {
-    const result = await pool.query(
-      `INSERT INTO projects (name, description, user_id, category_id)
-       VALUES ($1, $2, $3, $4) RETURNING *`,
+  async create(name: string, description: string, user_id: number, category_id: number): Promise<Project> {
+    const [result] = await pool.query(
+      "INSERT INTO projects (name, description, user_id, category_id) VALUES (?, ?, ?, ?)",
       [name, description, user_id, category_id]
     );
-    return result.rows[0];
+    const insertResult = result as { insertId: number };
+    const [rows] = await pool.query(
+      "SELECT * FROM projects WHERE id = ?",
+      [insertResult.insertId]
+    );
+    const projects = rows as Project[];
+    return projects[0];
   }
 
-  async update(
-    id: number,
-    name: string,
-    description: string,
-    category_id: number,
-    user_id: number
-  ): Promise<Project> {
-    const result = await pool.query(
-      `UPDATE projects SET name = $1, description = $2, category_id = $3,
-       updated_at = NOW() WHERE id = $4 AND user_id = $5 RETURNING *`,
+  async update(id: number, name: string, description: string, category_id: number, user_id: number): Promise<Project> {
+    await pool.query(
+      "UPDATE projects SET name = ?, description = ?, category_id = ?, updated_at = NOW() WHERE id = ? AND user_id = ?",
       [name, description, category_id, id, user_id]
     );
-    return result.rows[0];
+    const [rows] = await pool.query(
+      "SELECT * FROM projects WHERE id = ?",
+      [id]
+    );
+    const projects = rows as Project[];
+    return projects[0];
   }
 
   async delete(id: number, user_id: number): Promise<boolean> {
-    const result = await pool.query(
-      "DELETE FROM projects WHERE id = $1 AND user_id = $2",
+    const [result] = await pool.query(
+      "DELETE FROM projects WHERE id = ? AND user_id = ?",
       [id, user_id]
     );
-    return (result.rowCount ?? 0) > 0;
+    const deleteResult = result as { affectedRows: number };
+    return deleteResult.affectedRows > 0;
   }
 }

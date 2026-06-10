@@ -3,27 +3,30 @@ import { User } from "../types";
 
 export class UserRepository {
   async findByEmail(email: string): Promise<User | null> {
-    const result = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
+    const [rows] = await pool.query(
+      "SELECT * FROM users WHERE email = ?",
       [email]
     );
-    return result.rows[0] || null;
+    const users = rows as User[];
+    return users[0] || null;
   }
 
   async findByCPF(cpf: string): Promise<User | null> {
-    const result = await pool.query(
-      "SELECT * FROM users WHERE cpf = $1",
+    const [rows] = await pool.query(
+      "SELECT * FROM users WHERE cpf = ?",
       [cpf]
     );
-    return result.rows[0] || null;
+    const users = rows as User[];
+    return users[0] || null;
   }
 
   async findById(id: number): Promise<User | null> {
-    const result = await pool.query(
-      "SELECT * FROM users WHERE id = $1",
+    const [rows] = await pool.query(
+      "SELECT * FROM users WHERE id = ?",
       [id]
     );
-    return result.rows[0] || null;
+    const users = rows as User[];
+    return users[0] || null;
   }
 
   async create(
@@ -32,12 +35,13 @@ export class UserRepository {
     password: string,
     cpf: string
   ): Promise<User> {
-    const result = await pool.query(
-      `INSERT INTO users (name, email, password, cpf)
-       VALUES ($1, $2, $3, $4) RETURNING *`,
+    const [result] = await pool.query(
+      "INSERT INTO users (name, email, password, cpf) VALUES (?, ?, ?, ?)",
       [name, email, password, cpf]
     );
-    return result.rows[0];
+    const insertResult = result as { insertId: number };
+    const user = await this.findById(insertResult.insertId);
+    return user!;
   }
 
   async update(
@@ -46,11 +50,11 @@ export class UserRepository {
     cpf: string,
     password: string
   ): Promise<User> {
-    const result = await pool.query(
-      `UPDATE users SET name = $1, cpf = $2, password = $3,
-       updated_at = NOW() WHERE id = $4 RETURNING *`,
+    await pool.query(
+      "UPDATE users SET name = ?, cpf = ?, password = ?, updated_at = NOW() WHERE id = ?",
       [name, cpf, password, id]
     );
-    return result.rows[0];
+    const user = await this.findById(id);
+    return user!;
   }
 }
