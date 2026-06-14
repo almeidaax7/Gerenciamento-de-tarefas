@@ -1,25 +1,11 @@
 {
-  "name": "gereciador-de-tarefas",
+  "name": "gerenciador-de-tarefas",
   "version": "1.0.0",
-  "description": "Sistema fullstack de gerenciamento de tarefas com autenticação JWT.",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "cd backend && npm test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/almeidaax7/Gerenciamento-de-tarefas.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/almeidaax7/Gerenciamento-de-tarefas/issues"
-  },
-  "homepage": "https://github.com/almeidaax7/Gerenciamento-de-tarefas#readme",
   "devDependencies": {
-    "husky": "^9.1.7"
+    "husky": "^9.0.0"
   }
 }
