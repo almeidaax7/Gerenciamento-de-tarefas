@@ -77,7 +77,7 @@ function Categories() {
       <header className="page-header">
         <h2>📁 Categorias</h2>
         <div className="header-actions">
-          <button onClick={() => { setShowForm(!showForm); setEditId(null); setName(""); setDescription(""); }}>
+          <button onClick={() => { setShowForm(!showForm); setEditId(null); setName(""); setDescription(""); setError(""); setSuccess(""); }}>
             {showForm ? "Cancelar" : "Nova Categoria"}
           </button>
           <button onClick={() => navigate("/dashboard")}>Voltar</button>
@@ -97,7 +97,6 @@ function Categories() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                required
               />
             </div>
             <div className="form-group">

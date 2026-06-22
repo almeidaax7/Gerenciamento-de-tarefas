@@ -93,7 +93,7 @@ function Tasks() {
       <header className="page-header">
         <h2>✅ Tarefas</h2>
         <div className="header-actions">
-          <button onClick={() => { setShowForm(!showForm); setEditId(null); setTitle(""); setDescription(""); setStatus("pending"); setProjectId(0); }}>
+          <button onClick={() => { setShowForm(!showForm); setEditId(null); setTitle(""); setDescription(""); setStatus("pending"); setProjectId(0); setError(""); setSuccess(""); }}>
             {showForm ? "Cancelar" : "Nova Tarefa"}
           </button>
           <button onClick={() => navigate("/dashboard")}>Voltar</button>
@@ -109,7 +109,7 @@ function Tasks() {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Título *</label>
-              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+              <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
             <div className="form-group">
               <label>Descrição</label>
@@ -125,7 +125,7 @@ function Tasks() {
             </div>
             <div className="form-group">
               <label>Projeto *</label>
-              <select value={projectId} onChange={(e) => setProjectId(Number(e.target.value))} required>
+              <select value={projectId} onChange={(e) => setProjectId(Number(e.target.value))}>
                 <option value={0}>Selecione um projeto</option>
                 {projects.map((proj) => (
                   <option key={proj.id} value={proj.id}>{proj.name}</option>
